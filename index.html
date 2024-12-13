@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #FFFFFF;
+            color: #1D1D1F;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        header h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 2.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 1rem;
+        }
+
+        li a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: inherit;
+            text-decoration: none;
+            background-color: #F5F5F7AA;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        li a:hover {
+            background-color: #E5E5E7;
+            transform: scale(1.02);
+        }
+
+        .folder-icon {
+            display: inline-block;
+            margin-right: 1rem;
+            width: 28px;
+            height: 28px;
+        }
+
+        .folder-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #1D1D1F;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6E6E73;
+            font-size: 0.9rem;
+            border-top: 1px solid #E5E5E5;
+        }
+
+        footer a {
+            color: #0071E3;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        img.emoji {
+            height: 1em;
+            width: 1em;
+            margin: 0 .05em 0 .1em;
+            vertical-align: -0.1em;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            li a {
+                padding: 0.75rem 1rem;
+            }
+
+            .folder-icon {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>kriszsusu/szf1-ikt</h1>
+    </header>
+
+    <div class="container">
+        <ul id="folderList"></ul>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ by <a href="https://github.com/kriszsusu" target="_blank">kriszsusu</a></p>
+    </footer>
+
+    <script src="https://liba.lol/js/twemoji.min.js"></script>
+    <script>
+        twemoji.parse(document.body);
+        
+        async function fetchRepoFolders() {
+            const apiUrl = "https://api.github.com/repos/kriszsusu/szf1-ikt/contents";
+            const response = await fetch(apiUrl);
+            let data = await response.json();
+            const folderList = document.getElementById('folderList');
+
+            data = data.filter(item => item.type === 'dir' && !item.name.startsWith('.'));
+            data.sort((a, b) => a.name.localeCompare(b.name));
+
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="${item.html_url}" target="_blank">
+                        <span class="folder-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h5l2 2h9c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            </svg>
+                        </span>
+                        ${item.name}
+                    </a>`;
+                folderList.appendChild(li);
+            });
+        }
+
+        fetchRepoFolders();
+    </script>
+</body>
+</html>
